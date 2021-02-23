@@ -164,28 +164,28 @@ export class Analytics {
 		}
 
 		const script = document.createElement('script');
-		script.text = "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +
-			"(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," +
-			"m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" +
-			"})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');";
+		script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
 		document.querySelector('body').appendChild(script);
 
+
 		this._initFnGa();
-		ga.l = +new Date;
-		this._sendFnGa('create', id, 'auto');
+		gtag('js', new Date());
+		this._sendFnGa('config', id, { 'send_page_view': false });
 
 		this._initialized = true;
 	}
 
 	_initFnGa() {
-		window.ga = window.ga || function () {
-			(ga.q = ga.q || []).push(arguments)
+		window.dataLayer = window.dataLayer || [];
+
+		window.gtag = window.gtag || function () {
+			dataLayer.push(arguments)
 		};
 	}
 
 	_sendFnGa() {
 		this._initFnGa();
-		window.ga.apply(window.ga, arguments);
+		window.gtag.apply(window.gtag, arguments);
 	}
 
 	_attachClickTracker() {
@@ -257,7 +257,7 @@ export class Analytics {
 				if (options.exceptionTracking.customFnTrack) {
 					return options.exceptionTracking.customFnTrack(exOptions);
 				}
-				this._sendFnGa('send', 'exception', exOptions);
+				this._sendFnGa('event', 'app_exception', exOptions);
 			}
 
 			if (typeof existingWindowErrorCallback === 'function') {
@@ -299,7 +299,7 @@ export class Analytics {
 			return this._options.clickTracking.customFnTrack(tracking);
 		}
 
-		this._sendFnGa('send', 'event', tracking.category, tracking.action, tracking.label, tracking.value);
+		this._sendFnGa('event', 'click', tracking);
 	}
 
 	_trackPage(path, title) {
@@ -320,6 +320,6 @@ export class Analytics {
 		}
 
 		this._sendFnGa('set', props);
-		this._sendFnGa('send', 'pageview');
+		this._sendFnGa('event', 'page_view', props);
 	}
 }
