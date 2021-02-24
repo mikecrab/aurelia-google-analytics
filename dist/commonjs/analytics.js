@@ -271,7 +271,7 @@ var Analytics = exports.Analytics = (_dec = (0, _aureliaDependencyInjection.inje
 			return this._options.clickTracking.customFnTrack(tracking);
 		}
 
-		this._sendFnGa('send', 'click', tracking);
+		this._sendFnGa('event', 'click', tracking);
 	};
 
 	Analytics.prototype._trackPage = function _trackPage(path, title) {

@@ -270,7 +270,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-event-aggregator', 'au
 						return this._options.clickTracking.customFnTrack(tracking);
 					}
 
-					this._sendFnGa('send', 'click', tracking);
+					this._sendFnGa('event', 'click', tracking);
 				};
 
 				Analytics.prototype._trackPage = function _trackPage(path, title) {
